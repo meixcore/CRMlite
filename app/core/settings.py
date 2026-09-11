@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'company.apps.CompanyConfig',
     'storage.apps.StorageConfig',
+    'suppliers.apps.SupplierConfig',
     'rest_framework_simplejwt',
     'drf_spectacular',
     'django_filters',

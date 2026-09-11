@@ -13,5 +13,6 @@ urlpatterns = [
     path("api/v1/companies/", include("company.urls")),
     path('api/v1/login/', LoginView.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh/', RefreshTokenView.as_view(), name='token_refresh'),
-    path('api/v1/storages', include("storage.urls")),
+    path('api/v1/', include("storage.urls")),
+    path('api/v1/', include("suppliers.urls")),
 ]
