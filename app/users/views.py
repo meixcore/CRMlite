@@ -1,9 +1,9 @@
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 
 from users.models import User
+from company.permissions import IsCompanyOwner
 
 from .serializers import RegisterSerializer, AttachUserSerializer
 from drf_spectacular.utils import extend_schema
@@ -16,7 +16,7 @@ class UserRegistrationView(CreateAPIView):
     serializer_class = RegisterSerializer
 
 class AttachUserToCompanyView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsCompanyOwner]
 
     @extend_schema(
         request=AttachUserSerializer,

@@ -12,7 +12,7 @@ class SupplierCreateView(CreateAPIView):
     permission_classes = [IsCompanyMember]
 
     def perform_create(self, serializer):
-        serializer.save(company=self.request.user.company)
+        serializer.save(company_id=self.request.user.company)
 
 @extend_schema(tags=['supplier'])
 class SupplierListView(ListAPIView):
@@ -20,7 +20,7 @@ class SupplierListView(ListAPIView):
     permission_classes = [IsCompanyMember]
 
     def get_queryset(self):
-        return Supplier.objects.filter(company=self.request.user.company_id)
+        return Supplier.objects.filter(company_id=self.request.user.company_id)
 
 @extend_schema(tags=['supplier'])
 class SupplierRetrieveView(RetrieveAPIView):
@@ -53,4 +53,4 @@ class SupplyListView(ListAPIView):
     permission_classes = [IsCompanyMember]
 
     def get_queryset(self):
-        return Supply.objects.filter(supplier__company=self.request.user.company)
+        return Supply.objects.filter(supplier__company_id=self.request.user.company_id)

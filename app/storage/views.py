@@ -55,7 +55,7 @@ class ProductListView(ListAPIView):
     permission_classes = [IsCompanyMember]
 
     def get_queryset(self):
-        return Product.objects.filter(storage__company=self.request.user.company)
+        return Product.objects.filter(storage__company_id=self.request.user.company_id)
 
 @extend_schema(tags=["product"])
 class ProductUpdateView(UpdateAPIView):
@@ -65,7 +65,7 @@ class ProductUpdateView(UpdateAPIView):
     http_method_names = ["patch"]
 
     def get_queryset(self):
-        return Product.objects.filter(storage__company=self.request.user.company)
+        return Product.objects.filter(storage__company_id=self.request.user.company_id)
 
 @extend_schema(tags=["product"])
 class ProductDeleteView(DestroyAPIView):
@@ -73,4 +73,4 @@ class ProductDeleteView(DestroyAPIView):
     permission_classes = [IsCompanyMember]
 
     def get_queryset(self):
-        return Product.objects.filter(storage__company=self.request.user.company)
+        return Product.objects.filter(storage__company_id=self.request.user.company_id)
