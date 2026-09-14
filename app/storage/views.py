@@ -10,32 +10,37 @@ from .serializers import StorageSerializer, ProductSerializer
 
 @extend_schema(tags=["storage"])
 class StorageCreateView(CreateAPIView):
-    queryset = Storage.objects.all()
     serializer_class = StorageSerializer
     permission_classes = [IsCompanyOwner]
 
     def perform_create(self, serializer):
-        serializer.save(company=self.request.user.company)
+        serializer.save(company_id=self.request.user.company_id)
 
 @extend_schema(tags=["storage"])
 class StorageRetrieveView(RetrieveAPIView):
-    queryset = Storage.objects.all()
     serializer_class = StorageSerializer
     permission_classes = [IsCompanyMember]
 
+    def get_queryset(self):
+        return Storage.objects.filter(company_id=self.request.user.company_id)
+
 @extend_schema(tags=["storage"])
 class StorageUpdateView(UpdateAPIView):
-    queryset = Storage.objects.all()
     serializer_class = StorageSerializer
     permission_classes = [IsStorageOwner]
 
     http_method_names = ["patch"]
 
+    def get_queryset(self):
+        return Storage.objects.filter(company_id=self.request.user.company_id)
+
 @extend_schema(tags=["storage"])
 class StorageDeleteView(DestroyAPIView):
-    queryset = Storage.objects.all()
     serializer_class = StorageSerializer
     permission_classes = [IsStorageOwner]
+
+    def get_queryset(self):
+        return Storage.objects.filter(company_id=self.request.user.company_id)
 
 @extend_schema(tags=["product"])
 class ProductCreateView(CreateAPIView):
@@ -58,6 +63,14 @@ class ProductListView(ListAPIView):
         return Product.objects.filter(storage__company_id=self.request.user.company_id)
 
 @extend_schema(tags=["product"])
+class ProductRetrieveView(RetrieveAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [IsCompanyMember]
+
+    def get_queryset(self):
+        return Product.objects.filter(storage__company_id=self.request.user.company_id)
+
+@extend_schema(tags=["product"])
 class ProductUpdateView(UpdateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [IsCompanyMember]
@@ -66,6 +79,14 @@ class ProductUpdateView(UpdateAPIView):
 
     def get_queryset(self):
         return Product.objects.filter(storage__company_id=self.request.user.company_id)
+
+    def perform_update(self, serializer):
+        storage = serializer.validated_data.get("storage")
+
+        if storage is not None:
+            if storage.company_id != self.request.user.company_id:
+                raise ValidationError({"storage": "Этот склад не принадлежит вашей компании"})
+        serializer.save()
 
 @extend_schema(tags=["product"])
 class ProductDeleteView(DestroyAPIView):

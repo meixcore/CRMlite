@@ -7,12 +7,11 @@ from .serializers import SupplierSerializer, SupplyCreateSerializer, SupplySeria
 
 @extend_schema(tags=['supplier'])
 class SupplierCreateView(CreateAPIView):
-    queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
     permission_classes = [IsCompanyMember]
 
     def perform_create(self, serializer):
-        serializer.save(company_id=self.request.user.company)
+        serializer.save(company_id=self.request.user.company_id)
 
 @extend_schema(tags=['supplier'])
 class SupplierListView(ListAPIView):
@@ -24,23 +23,29 @@ class SupplierListView(ListAPIView):
 
 @extend_schema(tags=['supplier'])
 class SupplierRetrieveView(RetrieveAPIView):
-    queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
     permission_classes = [IsCompanyMember]
 
+    def get_queryset(self):
+        return Supplier.objects.filter(company_id=self.request.user.company_id)
+
 @extend_schema(tags=['supplier'])
 class SupplierUpdateView(UpdateAPIView):
-    queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
     permission_classes = [IsCompanyMember]
 
     http_method_names = ["patch"]
 
+    def get_queryset(self):
+        return Supplier.objects.filter(company_id=self.request.user.company_id)
+
 @extend_schema(tags=['supplier'])
 class SupplierDeleteView(DestroyAPIView):
-    queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
     permission_classes = [IsCompanyMember]
+
+    def get_queryset(self):
+        return Supplier.objects.filter(company_id=self.request.user.company_id)
 
 @extend_schema(tags=['supply'])
 class SupplyCreateView(CreateAPIView):
