@@ -5,3 +5,12 @@
 *.sqlite3
 
 .env
+
+staticfiles/
+media/
+
+
+.DS_Store
+Thumbs.db
+
+data/

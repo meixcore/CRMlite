@@ -14,12 +14,11 @@ from datetime import timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-# SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-# DEBUG = os.environ.get("DEBUG") in ('1', 'True')
-# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS","127.0.0.1").split(",")
-SECRET_KEY = 'my_super_secret_key'
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+DEBUG = os.environ.get("DEBUG") in ('1', 'True')
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS","127.0.0.1").split(",")
+STATIC_ROOT = BASE_DIR / 'static'
+
 AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
@@ -33,6 +32,7 @@ INSTALLED_APPS = [
     'company.apps.CompanyConfig',
     'storage.apps.StorageConfig',
     'suppliers.apps.SupplierConfig',
+    'sales.apps.SalesConfig',
     'rest_framework_simplejwt',
     'drf_spectacular',
     'django_filters',
@@ -93,8 +93,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'default_db_name'),
+        'USER': os.getenv('DB_USER', 'myprojectuser'),
+        'PASSWORD': os.getenv('DB_PASS', 'password'),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DB_PORT', 5432),
     }
 }
 

@@ -5,7 +5,7 @@ from .views import SupplierCreateView, SupplierRetrieveView, SupplierListView, S
 
 urlpatterns = [
     # Поставщик
-    path("suppliers/", SupplierListView.as_view(), name="supplier-list"),
+    path("suppliers/list/", SupplierListView.as_view(), name="supplier-list"),
     path("suppliers/create/", SupplierCreateView.as_view(), name="supplier-create"),
     path("suppliers/<int:pk>/", SupplierRetrieveView.as_view(), name="supplier-detail"),
     path("suppliers/<int:pk>/update/", SupplierUpdateView.as_view(), name="supplier-update"),
